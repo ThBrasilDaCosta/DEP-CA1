@@ -7,6 +7,6 @@ View(CrimesinBoston)
 crimes_2018 <- subset(CrimesinBoston, YEAR == 2018)
 View(crimes_2018)
 
-#dropping column 'SHOOTINH' from the subset.
-crimes_2018 <- subset(crimes_2018, select = -SHOOTING)
-View(crimes_2018)
+#dropping unnecessary columns  from the subset.
+crimes_2018 <- subset(crimes_2018, select = -c(INCIDENT_NUMBER, OFFENSE_CODE, REPORTING_AREA, SHOOTING, UCR_PART ))
+View(crimes_2018) 
