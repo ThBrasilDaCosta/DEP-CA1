@@ -1,4 +1,7 @@
 library(readr)
+library(dplyr)
+library(ggplot2)
+
 #reading csv file from big data set, Size 319073, 17.
 CrimesinBoston <- read_csv("CrimesinBoston.csv")
 #Dropping unnecessary columns.
@@ -16,9 +19,24 @@ total_crimes16 <- nrow(crimes_2016)
 total_crimes17 <- nrow(crimes_2017)
 total_crimes18 <- nrow(crimes_2018)
 total_crimesboston <- nrow(CrimesinBoston)
+#calling the variables created to check and compare the numbers with plots to come.
 show(total_crimes15)
 show(total_crimes16)
 show(total_crimes17)
 show(total_crimes18)
 show(total_crimes15 + total_crimes16 + total_crimes17 + total_crimes18)
 show(total_crimesboston)
+
+#creates subsets for each year and grouping them back.
+crimes_by_year <- CrimesinBoston %>%
+  group_by(YEAR) %>%
+  summarize(Total_Crimes = n())
+
+
+#creates a normal bar plot to visualize the crimes committed by year.
+ggplot(crimes_by_year, aes(x = factor(YEAR), y = Total_Crimes)) +
+  geom_bar(stat = "identity", fill = "blue", color = "black") +
+  labs(title = "Total Crimes in Boston (2015-2018",
+       x = "Year",
+       y = "Total Crimes") +
+  theme_minimal()
