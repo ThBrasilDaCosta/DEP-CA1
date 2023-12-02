@@ -36,7 +36,20 @@ crimes_by_year <- CrimesinBoston %>%
 #creates a normal bar plot to visualize the crimes committed by year.
 ggplot(crimes_by_year, aes(x = factor(YEAR), y = Total_Crimes)) +
   geom_bar(stat = "identity", fill = "blue", color = "black") +
-  labs(title = "Total Crimes in Boston (2015-2018",
+  labs(title = "Total Crimes in Boston (2015-2018)",
        x = "Year",
+       y = "Total Crimes") +
+  theme_minimal()
+#creates subsets for each weekday and grouping them back.
+crimes_by_weekday <- CrimesinBoston %>%
+  group_by(DAY_OF_WEEK) %>%
+  summarize(Total_Crimes = n())
+#defines an order for the weekdays to be displayed.
+weekday_order <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+
+ggplot(crimes_by_weekday, aes(x = factor(DAY_OF_WEEK, levels = weekday_order), y = Total_Crimes)) +
+  geom_bar(stat = "identity", fill = "darkgreen", color = "black") +
+  labs(title = "Total Crimes in Boston on Weekdays (2015-2018)",
+       x = "Weekdays",
        y = "Total Crimes") +
   theme_minimal()
