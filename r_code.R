@@ -53,3 +53,15 @@ ggplot(crimes_by_weekday, aes(x = factor(DAY_OF_WEEK, levels = weekday_order), y
        x = "Weekdays",
        y = "Total Crimes") +
   theme_minimal()
+
+crimes_by_district <- CrimesinBoston %>%
+  group_by(DISTRICT) %>%
+  summarize(Total_Crimes = n())
+
+
+ggplot(crimes_by_district, aes(x = factor(DISTRICT), y = Total_Crimes)) +
+  geom_bar(stat = "identity", fill = "orange", color = "black") +
+  labs(title = "Total Crimes in Boston by Distric (2015-2018)",
+       x = "Districts",
+       y = "Total Crimes") +
+  theme_minimal()
