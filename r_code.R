@@ -32,6 +32,7 @@ show(total_crimesboston)
 crimes_by_year <- CrimesinBoston %>%
   group_by(YEAR) %>%
   summarize(Total_Crimes = n())
+show(crimes_by_year)
 #creates a normal bar plot to visualize the crimes committed by year.
 ggplot(crimes_by_year, aes(x = factor(YEAR), y = Total_Crimes)) +
   geom_bar(stat = "identity", fill = "blue", color = "black") +
@@ -61,10 +62,28 @@ crimes_by_district <- CrimesinBoston %>%
 #creates a normal bar plot to visualize the crimes committed by district along 2015-2018.
 ggplot(crimes_by_district, aes(x = factor(DISTRICT), y = Total_Crimes)) +
   geom_bar(stat = "identity", fill = "orange", color = "black") +
-  labs(title = "Total Crimes in Boston by Distric (2015-2018)",
+  labs(title = "Total Crimes in Boston by District (2015-2018)",
        x = "Districts",
        y = "Total Crimes") +
   theme_minimal()
 
 #TASK b.
+
+#creates the mean for Crimes in Boston from 2015 to 2018.
+
+x <-  sum(crimes_by_year$Total_Crimes)
+y <- n_distinct(CrimesinBoston$YEAR)
+
+mean_crimes_by_year <- x/y
+ 
+ggplot(crimes_by_year, aes(x = YEAR, y = Total_Crimes)) +
+  geom_line() +
+  geom_hline(yintercept = mean_crimes_by_year, linetype = "dashed", color = "red") +
+  labs(title = "Total Crimes in Boston by Year",
+       x = "Year",
+       y = "Total Crimes",
+       caption = paste("Mean Crimes per Year: ", round(mean_crimes_by_year, 2))) +
+  theme_minimal()
+
+
 
