@@ -71,19 +71,27 @@ ggplot(crimes_by_district, aes(x = factor(DISTRICT), y = Total_Crimes)) +
 
 #creates the mean for Crimes in Boston from 2015 to 2018.
 
-x <-  sum(crimes_by_year$Total_Crimes)
-y <- n_distinct(CrimesinBoston$YEAR)
+crimes <- c(total_crimes15,total_crimes16,total_crimes17,total_crimes18)
+crime_mean <- mean(crimes)
+print(crime_mean)
 
-mean_crimes_by_year <- x/y
- 
 ggplot(crimes_by_year, aes(x = YEAR, y = Total_Crimes)) +
-  geom_line() +
-  geom_hline(yintercept = mean_crimes_by_year, linetype = "dashed", color = "red") +
+  geom_line(lwd = 1.5, color= "brown") +
+  geom_hline(yintercept = crime_mean, linetype = "dashed", lwd = 2, color = "blue") +
   labs(title = "Total Crimes in Boston by Year",
        x = "Year",
        y = "Total Crimes",
-       caption = paste("Mean Crimes per Year: ", round(mean_crimes_by_year, 2))) +
+       caption = paste("Mean Crimes per Year: ", round(crime_mean, 2))) +
   theme_minimal()
 
+crime_median <- median(crimes)
+print(crime_median)
 
-
+ggplot(crimes_by_year, aes(x = YEAR, y = Total_Crimes)) +
+  geom_line(lwd = 1.5, color = "green") +
+  geom_hline(yintercept = crime_median, linetype = 4,lwd = 2, color = "purple") +
+  labs(title = "Total Crimes in Boston by Year",
+       x = "Year",
+       y = "Total Crimes",
+       caption = paste("Median Crimes per Year: ", round(crime_median, 2))) +
+  theme_minimal()
