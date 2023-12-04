@@ -27,12 +27,11 @@ show(total_crimes18)
 show(total_crimes15 + total_crimes16 + total_crimes17 + total_crimes18)
 show(total_crimesboston)
 
+#TASK a.
 #creates subsets for each year and grouping them back.
 crimes_by_year <- CrimesinBoston %>%
   group_by(YEAR) %>%
   summarize(Total_Crimes = n())
-
-
 #creates a normal bar plot to visualize the crimes committed by year.
 ggplot(crimes_by_year, aes(x = factor(YEAR), y = Total_Crimes)) +
   geom_bar(stat = "identity", fill = "blue", color = "black") +
@@ -40,13 +39,14 @@ ggplot(crimes_by_year, aes(x = factor(YEAR), y = Total_Crimes)) +
        x = "Year",
        y = "Total Crimes") +
   theme_minimal()
+
 #creates subsets for each weekday and grouping them back.
 crimes_by_weekday <- CrimesinBoston %>%
   group_by(DAY_OF_WEEK) %>%
   summarize(Total_Crimes = n())
 #defines an order for the weekdays to be displayed.
 weekday_order <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
-
+#creates a normal bar plot to visualize the crimes committed by each day of the week along 2015-2018.
 ggplot(crimes_by_weekday, aes(x = factor(DAY_OF_WEEK, levels = weekday_order), y = Total_Crimes)) +
   geom_bar(stat = "identity", fill = "darkgreen", color = "black") +
   labs(title = "Total Crimes in Boston on Weekdays (2015-2018)",
@@ -54,14 +54,17 @@ ggplot(crimes_by_weekday, aes(x = factor(DAY_OF_WEEK, levels = weekday_order), y
        y = "Total Crimes") +
   theme_minimal()
 
+#creates subsets for each district and grouping them back.
 crimes_by_district <- CrimesinBoston %>%
   group_by(DISTRICT) %>%
   summarize(Total_Crimes = n())
-
-
+#creates a normal bar plot to visualize the crimes committed by district along 2015-2018.
 ggplot(crimes_by_district, aes(x = factor(DISTRICT), y = Total_Crimes)) +
   geom_bar(stat = "identity", fill = "orange", color = "black") +
   labs(title = "Total Crimes in Boston by Distric (2015-2018)",
        x = "Districts",
        y = "Total Crimes") +
   theme_minimal()
+
+#TASK b.
+
