@@ -1,6 +1,7 @@
 library(readr)
 library(dplyr)
 library(ggplot2)
+library(MASS)
 
 #reading csv file from big data set, Size 319073, 17.
 CrimesinBoston <- read_csv("CrimesinBoston.csv")
@@ -140,5 +141,11 @@ print(crimes)
 print("Standardized Data:")
 print(normalizeStandardized_data)
 
-
 # Robust Scaling function
+robust_scaling <- function(x) {
+  (x - median(x)) / IQR(x)
+}
+# Apply Robust Scale to the dataset crimes by each year.
+robust_scaled_data <- as.data.frame(lapply(crimes, robust_scaling))
+print("Robust Scaled Data:")
+print(robust_scaled_data)
