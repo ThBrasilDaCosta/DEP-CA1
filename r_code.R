@@ -84,6 +84,8 @@ ggplot(crimes_by_year, aes(x = YEAR, y = Total_Crimes)) +
        caption = paste("Mean Crimes per Year: ", round(crime_mean, 2))) +
   theme_minimal()
 
+#creates the median for Crimes in Boston from 2015 to 2018.
+
 crime_median <- median(crimes)
 print(crime_median)
 
@@ -96,6 +98,31 @@ ggplot(crimes_by_year, aes(x = YEAR, y = Total_Crimes)) +
        caption = paste("Median Crimes per Year: ", round(crime_median, 2))) +
   theme_minimal()
 
+#creates the Standard Deviation for Crimes in Boston from 2015 to 2018.
 crime_std <- sd(crimes)
 print(crime_std)
+
+
+
+#TASK c.
+# Min-Max normalization function
+
+crimes <- data.frame(
+  crime1516 = c(total_crimes15, total_crimes16),
+  crime1718 = c(total_crimes17, total_crimes18)
+  
+)
+min_max_normalization <- function(x) {
+  (x - min(x)) / (max(x) - min(x))
+}
+
+# Apply Min-Max normalization to the dataset
+normalized_data <- as.data.frame(lapply(crimes, min_max_normalization))
+
+# Print the original and normalized datasets
+print("Original Data:")
+print(crimes)
+
+print("Normalized Data:")
+print(normalized_data)
 
