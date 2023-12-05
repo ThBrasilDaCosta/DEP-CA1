@@ -112,11 +112,12 @@ crimes <- data.frame(
   crime1718 = c(total_crimes17, total_crimes18)
   
 )
+#Min-Max Normalization function
 min_max_normalization <- function(x) {
   (x - min(x)) / (max(x) - min(x))
 }
 
-# Apply Min-Max normalization to the dataset
+# Apply Min-Max normalization to the dataset crimes by each year.
 normalized_data <- as.data.frame(lapply(crimes, min_max_normalization))
 
 # Print the original and normalized datasets
@@ -126,3 +127,18 @@ print(crimes)
 print("Normalized Data:")
 print(normalized_data)
 
+# Z-score Standardization function.
+normalizeStandardized <- function(x) {
+  return((x - mean(x)) / sd(x))
+}
+# Apply Z-Score standardization to the dataset crimes by each year.
+normalizeStandardized_data <- as.data.frame(lapply(crimes, normalizeStandardized))
+
+print("Original Data:")
+print(crimes)
+
+print("Standardized Data:")
+print(normalizeStandardized_data)
+
+
+# Robust Scaling function
