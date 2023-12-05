@@ -95,3 +95,7 @@ ggplot(crimes_by_year, aes(x = YEAR, y = Total_Crimes)) +
        y = "Total Crimes",
        caption = paste("Median Crimes per Year: ", round(crime_median, 2))) +
   theme_minimal()
+
+crime_std <- sd(crimes)
+print(crime_std)
+
