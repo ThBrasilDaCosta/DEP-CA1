@@ -123,10 +123,6 @@ ggplot(crimes_by_year, aes(x = factor(YEAR), y = totalCrime_norm)) +
        y = "Total Crimes") +
   theme_minimal()
 
-# Print the original and normalized datasets
-print("Original Data:")
-print(crimes_by_year)
-
 print("Normalized Data:")
 print(totalCrime_norm )
 
@@ -137,11 +133,14 @@ districtCrime_norm <- min_max_normalization(crimes_by_district$Total_Crimes)
 ggplot(crimes_by_district, aes(x = factor(DISTRICT), y = districtCrime_norm)) +
   geom_bar(stat = "identity", fill = "green", color = "black") +
   labs(title = "Total Crimes in Boston by District - Normalized",
-       x = "Year",
+       x = "District",
        y = "Total Crimes") +
   theme_minimal()
 
-# Apply Min-Max normalization to the dataset crimes by each district.
+print("Normalized Data:")
+print(districtCrime_norm )
+
+# Apply Min-Max normalization to the dataset crimes by week.
 
 weekdayCrime_norm <- min_max_normalization(crimes_by_weekday$Total_Crimes)
 
@@ -152,6 +151,9 @@ ggplot(crimes_by_weekday, aes(x = factor(DAY_OF_WEEK, levels = weekday_order), y
        y = "Total Crimes") +
   theme_minimal()
 
+print("Normalized Data:")
+print(weekdayCrime_norm )
+
 # Z-score Standardization function.
 normalizeStandardized <- function(x) {
   return((x - mean(x)) / sd(x))
@@ -159,17 +161,91 @@ normalizeStandardized <- function(x) {
 # Apply Z-Score standardization to the dataset crimes by each year.
 totalCrime_std <- normalizeStandardized(crimes_by_year$Total_Crimes)
 
-print("Original Data:")
-print(crimes_by_year)
+ggplot(crimes_by_year, aes(x = factor(YEAR), y = totalCrime_std)) +
+  geom_bar(stat = "identity", fill = "brown", color = "black") +
+  labs(title = "Total Crimes in Boston by District - Z-Score Std",
+       x = "Year",
+       y = "Total Crimes") +
+  theme_minimal()
 
 print("Standardized Data:")
 print(totalCrime_std)
+
+# Apply Z-Score standardization to the dataset crimes by district.
+
+districtCrime_std <- normalizeStandardized(crimes_by_district$Total_Crimes)
+
+ggplot(crimes_by_district, aes(x = factor(DISTRICT), y = districtCrime_std)) +
+  geom_bar(stat = "identity", fill = "lightblue", color = "black") +
+  labs(title = "Total Crimes in Boston (2015-2018) - Z-Score Std",
+       x = "District",
+       y = "Total Crimes") +
+  theme_minimal()
+
+print("Standardized Data:")
+print(districtCrime_std)
+
+# Apply Z-Score standardization to the dataset crimes by week.
+
+weekdayCrime_std <- normalizeStandardized(crimes_by_weekday$Total_Crimes)
+
+ggplot(crimes_by_weekday, aes(x = factor(DAY_OF_WEEK, levels = weekday_order), y = weekdayCrime_norm)) +
+  geom_bar(stat = "identity", fill = "lightyellow", color = "black") +
+  labs(title = "Total Crimes in Boston on Weekdays (2015-2018) - Z-Score Std",
+       x = "Weekdays",
+       y = "Total Crimes") +
+  theme_minimal()
+
+print("Normalized Data:")
+print(weekdayCrime_std )
+
+print("Standardized Data:")
+print(districtCrime_std)
+
 
 # Robust Scaling function
 robust_scaling <- function(x) {
   (x - median(x)) / IQR(x)
 }
 # Apply Robust Scale to the dataset crimes by each year.
-robust_scaled_data <- as.data.frame(lapply(crimes_by_year, robust_scaling))
+robust_scaled_year <- robust_scaling(crimes_by_year$Total_Crimes)
+
+ggplot(crimes_by_year, aes(x = factor(YEAR), y = robust_scaled_year)) +
+  geom_bar(stat = "identity", fill = "gold", color = "black") +
+  labs(title = "Total Crimes in Boston (2015-2018) - Robust Scale",
+       x = "Year",
+       y = "Total Crimes") +
+  theme_minimal()
+
 print("Robust Scaled Data:")
-print(robust_scaled_data)
+print(robust_scaled_year)
+
+# Apply Robust Scale to the dataset crimes by district.
+
+robust_scaled_district <- robust_scaling(crimes_by_district$Total_Crimes)
+
+ggplot(crimes_by_district, aes(x = factor(DISTRICT), y = robust_scaled_district)) +
+  geom_bar(stat = "identity", fill = "darkblue", color = "black") +
+  labs(title = "Total Crimes in Boston by District - Robust Scale",
+       x = "District",
+       y = "Total Crimes") +
+  theme_minimal()
+
+print("Robust Scaled Data:")
+print(robust_scaled_district)
+
+
+# Apply Robust Scale to the dataset crimes by weekday.
+
+robust_scaled_weekday <- robust_scaling(crimes_by_weekday$Total_Crimes)
+
+ggplot(crimes_by_weekday, aes(x = factor(DAY_OF_WEEK, levels = weekday_order), y = robust_scaled_weekday)) +
+  geom_bar(stat = "identity", fill = "purple", color = "black") +
+  labs(title = "Total Crimes in Boston by Weekdays - Robust Scale",
+       x = "Weekdays",
+       y = "Total Crimes") +
+  theme_minimal()
+
+print("Robust Scaled Data:")
+print(robust_scaled_weekday)
+
