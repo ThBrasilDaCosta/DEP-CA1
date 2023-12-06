@@ -106,46 +106,70 @@ print(crime_std)
 
 
 #TASK c.
-# Min-Max normalization function
 
-crimes <- data.frame(
-  crime1516 = c(total_crimes15, total_crimes16),
-  crime1718 = c(total_crimes17, total_crimes18)
-  
-)
 #Min-Max Normalization function
 min_max_normalization <- function(x) {
   (x - min(x)) / (max(x) - min(x))
 }
 
 # Apply Min-Max normalization to the dataset crimes by each year.
-normalized_data <- as.data.frame(lapply(crimes, min_max_normalization))
+
+totalCrime_norm <- min_max_normalization(crimes_by_year$Total_Crimes)
+
+ggplot(crimes_by_year, aes(x = factor(YEAR), y = totalCrime_norm)) +
+  geom_bar(stat = "identity", fill = "brown", color = "black") +
+  labs(title = "Total Crimes in Boston (2015-2018) - Normalized",
+       x = "Year",
+       y = "Total Crimes") +
+  theme_minimal()
 
 # Print the original and normalized datasets
 print("Original Data:")
-print(crimes)
+print(crimes_by_year)
 
 print("Normalized Data:")
-print(normalized_data)
+print(totalCrime_norm )
+
+# Apply Min-Max normalization to the dataset crimes by each district.
+
+districtCrime_norm <- min_max_normalization(crimes_by_district$Total_Crimes)
+
+ggplot(crimes_by_district, aes(x = factor(DISTRICT), y = districtCrime_norm)) +
+  geom_bar(stat = "identity", fill = "green", color = "black") +
+  labs(title = "Total Crimes in Boston by District - Normalized",
+       x = "Year",
+       y = "Total Crimes") +
+  theme_minimal()
+
+# Apply Min-Max normalization to the dataset crimes by each district.
+
+weekdayCrime_norm <- min_max_normalization(crimes_by_weekday$Total_Crimes)
+
+ggplot(crimes_by_weekday, aes(x = factor(DAY_OF_WEEK, levels = weekday_order), y = weekdayCrime_norm)) +
+  geom_bar(stat = "identity", fill = "darkgreen", color = "black") +
+  labs(title = "Total Crimes in Boston on Weekdays (2015-2018) - Normalized",
+       x = "Weekdays",
+       y = "Total Crimes") +
+  theme_minimal()
 
 # Z-score Standardization function.
 normalizeStandardized <- function(x) {
   return((x - mean(x)) / sd(x))
 }
 # Apply Z-Score standardization to the dataset crimes by each year.
-normalizeStandardized_data <- as.data.frame(lapply(crimes, normalizeStandardized))
+totalCrime_std <- normalizeStandardized(crimes_by_year$Total_Crimes)
 
 print("Original Data:")
-print(crimes)
+print(crimes_by_year)
 
 print("Standardized Data:")
-print(normalizeStandardized_data)
+print(totalCrime_std)
 
 # Robust Scaling function
 robust_scaling <- function(x) {
   (x - median(x)) / IQR(x)
 }
 # Apply Robust Scale to the dataset crimes by each year.
-robust_scaled_data <- as.data.frame(lapply(crimes, robust_scaling))
+robust_scaled_data <- as.data.frame(lapply(crimes_by_year, robust_scaling))
 print("Robust Scaled Data:")
 print(robust_scaled_data)
