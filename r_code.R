@@ -2,6 +2,8 @@ library(readr)
 library(dplyr)
 library(ggplot2)
 library(MASS)
+install.packages("reshape2")
+library(reshape2)
 
 #reading csv file from big data set, Size 319073, 17.
 CrimesinBoston <- read_csv("CrimesinBoston.csv")
@@ -248,4 +250,21 @@ ggplot(crimes_by_weekday, aes(x = factor(DAY_OF_WEEK, levels = weekday_order), y
 
 print("Robust Scaled Data:")
 print(robust_scaled_weekday)
+
+# Task d.
+columns <- c("HOUR", "Lat", "Long", "MONTH")
+cor_matrix <- cor(CrimesinBoston[, columns], use = "complete.obs")
+print(cor_matrix)
+
+melted_cor_matrix <- as.data.frame(as.table(cor_matrix))
+names(melted_cor_matrix) <- c("OFFENSE_CODE_GROUP", "YEAR", "Correlation")
+
+str(melted_cor_matrix)
+
+heatmap_cor_plot <- ggplot(melted_cor_matrix, aes(OFFENSE_CODE_GROUP, YEAR, fill = Correlation)) +
+  geom_tile(color = "gold") +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limit = c(-1,1), space = "Lab", name="Correlation") +
+  theme_minimal() +
+  labs(title = "Correlation Heatmap")
+print(heatmap_cor_plot)
 
