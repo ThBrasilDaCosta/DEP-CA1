@@ -298,3 +298,6 @@ crimesBoston_dummy <- crimesBoston_dummy[, !(names(crimesBoston_dummy) %in% colu
 
 show(crimesBoston_dummy)
 #View(crimesBoston_dummy)
+
+# git
+#https://github.com/ThBrasilDaCosta/DEP-CA1
