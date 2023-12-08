@@ -4,12 +4,14 @@ library(ggplot2)
 library(MASS)
 install.packages("reshape2")
 library(reshape2)
+install.packages("GGally")
+library(GGally)
 
 #reading csv file from big data set, Size 319073, 17.
 CrimesinBoston <- read_csv("CrimesinBoston.csv")
 #Dropping unnecessary columns.
-CrimesinBoston <- subset(CrimesinBoston, select = -c(INCIDENT_NUMBER, OFFENSE_CODE, REPORTING_AREA, SHOOTING, UCR_PART ))
-View(CrimesinBoston)#Size 319073, 12
+CrimesinBoston <- subset(CrimesinBoston, select = -c(INCIDENT_NUMBER, OFFENSE_CODE, REPORTING_AREA, UCR_PART ))
+View(CrimesinBoston)#Size 319073, 13
 
 #creating subset of crimes 2015, 2016, 2017.
 crimes_2015 <- subset(CrimesinBoston, YEAR == 2015)
@@ -120,7 +122,7 @@ totalCrime_norm <- min_max_normalization(crimes_by_year$Total_Crimes)
 
 ggplot(crimes_by_year, aes(x = factor(YEAR), y = totalCrime_norm)) +
   geom_bar(stat = "identity", fill = "brown", color = "black") +
-  labs(title = "Total Crimes in Boston (2015-2018) - Normalized",
+  labs(title = "Total Crimes in Boston (2015-2018) - Min-Max Normalized",
        x = "Year",
        y = "Total Crimes") +
   theme_minimal()
@@ -134,7 +136,7 @@ districtCrime_norm <- min_max_normalization(crimes_by_district$Total_Crimes)
 
 ggplot(crimes_by_district, aes(x = factor(DISTRICT), y = districtCrime_norm)) +
   geom_bar(stat = "identity", fill = "green", color = "black") +
-  labs(title = "Total Crimes in Boston by District - Normalized",
+  labs(title = "Total Crimes in Boston by District - Min-MAx Normalized",
        x = "District",
        y = "Total Crimes") +
   theme_minimal()
@@ -148,7 +150,7 @@ weekdayCrime_norm <- min_max_normalization(crimes_by_weekday$Total_Crimes)
 
 ggplot(crimes_by_weekday, aes(x = factor(DAY_OF_WEEK, levels = weekday_order), y = weekdayCrime_norm)) +
   geom_bar(stat = "identity", fill = "darkgreen", color = "black") +
-  labs(title = "Total Crimes in Boston on Weekdays (2015-2018) - Normalized",
+  labs(title = "Total Crimes in Boston on Weekdays (2015-2018) - Min-Max Normalized",
        x = "Weekdays",
        y = "Total Crimes") +
   theme_minimal()
@@ -253,14 +255,17 @@ print(robust_scaled_weekday)
 
 # Task d.
 columns <- c("HOUR", "Lat", "Long", "MONTH")
+
+#correlation
 cor_matrix <- cor(CrimesinBoston[, columns], use = "complete.obs")
 print(cor_matrix)
 
+# correlation matrix
 melted_cor_matrix <- as.data.frame(as.table(cor_matrix))
 names(melted_cor_matrix) <- c("OFFENSE_CODE_GROUP", "YEAR", "Correlation")
-
 str(melted_cor_matrix)
 
+# correlation heatmap
 heatmap_cor_plot <- ggplot(melted_cor_matrix, aes(OFFENSE_CODE_GROUP, YEAR, fill = Correlation)) +
   geom_tile(color = "gold") +
   scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limit = c(-1,1), space = "Lab", name="Correlation") +
@@ -268,3 +273,28 @@ heatmap_cor_plot <- ggplot(melted_cor_matrix, aes(OFFENSE_CODE_GROUP, YEAR, fill
   labs(title = "Correlation Heatmap")
 print(heatmap_cor_plot)
 
+#scattered subset
+#subset_data <- na.omit(CrimesinBoston[, columns])
+#ggpairs(subset_data, title = "Scatterplot Matrix")
+
+# Task f.
+
+#Dummy encode
+install.packages("caret")
+install.packages("lattice")
+library(caret)
+#dataset seleccted.
+crimesBoston_dummy <- CrimesinBoston
+#picked columns to apply the dummy encoding
+columns_to_dummy <- c("DISTRICT", "DAY_OF_WEEK")
+#dummy variables generator.
+dummy_data <- dummyVars("~.", data = crimesBoston_dummy[columns_to_dummy])
+#apply changes to the original dataset.
+crime_data_dummies <- as.data.frame(predict(dummy_data, newdata = crimesBoston_dummy[columns_to_dummy]))
+#bind the original dataset with generated dummy variables.
+crimesBoston_dummy <- cbind(crimesBoston_dummy, crime_data_dummies)
+#if necessary remove original categorical columns.
+crimesBoston_dummy <- crimesBoston_dummy[, !(names(crimesBoston_dummy) %in% columns_to_dummy)]
+
+show(crimesBoston_dummy)
+#View(crimesBoston_dummy)
